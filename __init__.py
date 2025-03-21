@@ -7,7 +7,7 @@ import sqlite3
 import os
 
 app = Flask(__name__)                                                                                                                  
-app.secret_key = os.urandom(24)
+app.secret_key = ${{ secrets.SECRET_KEY }}
 
 @app.route('/')
 def hello_world():
@@ -37,20 +37,58 @@ def decryptage(key, valeur):
     except Exception as e:
         return f"Erreur : clé invalide ou autre problème - {str(e)}"
 
-@app.route('/mykey')
+@app.route('/my_key', methods=['GET', 'POST'])
 def my_key():
-    # Vérifie si la clé est déjà dans la session
     if 'user_key' not in session:
         session['user_key'] = Fernet.generate_key().decode()
 
     key = session['user_key']
-    return f"""
-        <h1>Votre clé personnelle</h1>
-        <p><strong>Clé :</strong> {key}</p>
-        <p>Copiez cette clé pour chiffrer/déchiffrer vos données.</p>
-        <p>Exemple Pour encrypt: <a href="/encrypt/{key}/Bonjour">/encrypt/{key}/Bonjour</a></p>
-        <p>Exemple Pour decrypt: /decrypt/{key}/valeur_a_encrypt</p>
+    message = ""
+    encrypted_value = ""
+    decrypted_value = ""
+
+    if request.method == 'POST':
+        f = Fernet(key.encode())
+
+        if 'encrypt_value' in request.form and request.form['encrypt_value']:
+            try:
+                encrypted_value = f.encrypt(request.form['encrypt_value'].encode()).decode()
+                message = "Texte chiffré avec succès."
+            except Exception as e:
+                message = f"Erreur lors du chiffrement : {str(e)}"
+
+        elif 'decrypt_value' in request.form and request.form['decrypt_value']:
+            try:
+                decrypted_value = f.decrypt(request.form['decrypt_value'].encode()).decode()
+                message = "Texte déchiffré avec succès."
+            except Exception as e:
+                message = f"Erreur lors du déchiffrement : {str(e)}"
+
+    html = f"""
+    <h1>Votre clé personnelle</h1>
+    <form method="post">
+        <label>Clé (personnelle, générée automatiquement) :</label><br>
+        <input type="text" name="key" value="{key}" readonly size="80"><br><br>
+
+        <label>Texte à chiffrer :</label><br>
+        <input type="text" name="encrypt_value" size="80"><br>
+        <input type="submit" value="Chiffrer"><br><br>
+
+        <label>Texte à déchiffrer :</label><br>
+        <input type="text" name="decrypt_value" size="80"><br>
+        <input type="submit" value="Déchiffrer"><br><br>
+
+        <strong>{message}</strong><br><br>
     """
+
+    if encrypted_value:
+        html += f"<b>Résultat :</b> {encrypted_value}<br>"
+    if decrypted_value:
+        html += f"<b>Résultat :</b> {decrypted_value}<br>"
+
+    html += "</form>"
+
+    return html
 
 if __name__ == "__main__":
   app.run(debug=True)
