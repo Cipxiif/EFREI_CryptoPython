@@ -17,7 +17,7 @@ key = Fernet.generate_key()
 f = Fernet(key)
 
 @app.route('/encrypt/<key>/<string:valeur>')
-def encryptage(valeur):
+def encryptage(key, valeur):
     try:
         f = Fernet(key.encode())
         token = f.encrypt(valeur.encode())
@@ -26,7 +26,7 @@ def encryptage(valeur):
         return f"Erreur : clé invalide ou autre problème - {str(e)}"
 
 @app.route('/decrypt/<key>/<string:valeur>')
-def decryptage(valeur):
+def decryptage(key, valeur):
     try:
         f = Fernet(key.encode())
         valeur_bytes = valeur.encode()
