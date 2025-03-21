@@ -37,18 +37,34 @@ def decryptage(key, valeur):
     except Exception as e:
         return f"Erreur : clé invalide ou autre problème - {str(e)}"
 
-@app.route('/mykey')
+@app.route('/mykey', methods=['GET', 'POST'])
 def my_key():
     if 'user_key' not in session:
         session['user_key'] = Fernet.generate_key().decode()
 
     key = session['user_key']
-    return f"""
-        <h1>Votre clé personnelle</h1>
-        <p><strong>Clé :</strong> {key}</p>
-        <p>Copiez cette clé pour chiffrer/déchiffrer vos données.</p>
-        <p>Exemple : <a href="/encrypt/{key}/Bonjour">/encrypt/{key}/Bonjour</a></p>
-    """
+    message = ""
+    encrypted_value = ""
+    decrypted_value = ""
+
+    if request.method == 'POST':
+        f = Fernet(key.encode())
+
+        if 'encrypt_value' in request.form and request.form['encrypt_value']:
+            try:
+                encrypted_value = f.encrypt(request.form['encrypt_value'].encode()).decode()
+                message = "✅ Texte chiffré avec succès."
+            except Exception as e:
+                message = f"❌ Erreur lors du chiffrement : {str(e)}"
+
+        elif 'decrypt_value' in request.form and request.form['decrypt_value']:
+            try:
+                decrypted_value = f.decrypt(request.form['decrypt_value'].encode()).decode()
+                message = "✅ Texte déchiffré avec succès."
+            except Exception as e:
+                message = f"❌ Erreur lors du déchiffrement : {str(e)}"
+
+    return render_template("mykey.html", key=key, message=message, encrypted_value=encrypted_value, decrypted_value=decrypted_value)
 
 if __name__ == "__main__":
   app.run(debug=True)
