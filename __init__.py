@@ -37,7 +37,7 @@ def decryptage(key, valeur):
     except Exception as e:
         return f"Erreur : clé invalide ou autre problème - {str(e)}"
 
-@app.route('/my_key')
+@app.route('/mykey')
 def my_key():
     # Vérifie si la clé est déjà dans la session
     if 'user_key' not in session:
@@ -48,7 +48,8 @@ def my_key():
         <h1>Votre clé personnelle</h1>
         <p><strong>Clé :</strong> {key}</p>
         <p>Copiez cette clé pour chiffrer/déchiffrer vos données.</p>
-        <p>Exemple : <a href="/encrypt/{key}/Bonjour">/encrypt/{key}/Bonjour</a></p>
+        <p>Exemple Pour encrypt: <a href="/encrypt/{key}/Bonjour"></a></p>
+        <p>Exemple Pour decrypt: <a href="/decrypt/{key}/Bonjour"></a></p>
     """
 
 if __name__ == "__main__":
