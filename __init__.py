@@ -49,7 +49,7 @@ def my_key():
         <p><strong>Clé :</strong> {key}</p>
         <p>Copiez cette clé pour chiffrer/déchiffrer vos données.</p>
         <p>Exemple Pour encrypt: <a href="/encrypt/{key}/Bonjour">/encrypt/{key}/Bonjour</a></p>
-        <p>Exemple Pour decrypt: <a href="/decrypt/{key}/Bonjour">/decrypt/{key}/Bonjour</a></p>
+        <p>Exemple Pour decrypt: /decrypt/{key}/valeur_a_encrypt</p>
     """
 
 if __name__ == "__main__":
