@@ -46,7 +46,7 @@ def my_key():
     message = ""
     encrypted_value = ""
     decrypted_value = ""
-
+    
     if request.method == 'POST':
         f = Fernet(key.encode())
 
@@ -63,22 +63,23 @@ def my_key():
                 message = "✅ Texte déchiffré avec succès."
             except Exception as e:
                 message = f"❌ Erreur lors du déchiffrement : {str(e)}"
-
+                
     return f"""
-    <h1>Votre clé personnelle</h1>
-    <form method="post">
-        <label>Clé (générée automatiquement) :</label><br>
-        <input type="text" name="key" value="{key}" size="80"><br><br>
+        <h1>Votre clé personnelle</h1>
+        <form method="post">
+            <label>Clé (générée automatiquement) :</label><br>
+            <input type='text' name='key' value='{key}' size='80'><br><br>
 
-        <label>Texte à chiffrer :</label><br>
-        <input type="text" name="encrypt_value" size="80"><br>
-        <input type="submit" value="Chiffrer"><br><br>
-
-        <label>Texte à déchiffrer :</label><br>
-        <input type="text" name="decrypt_value" size="80"><br>
-        <input type="submit" value="Déchiffrer"><br><br>
-
-        <strong>{message}</strong><br><br>
+            <label>Texte à chiffrer :</label><br>
+            <input type='text' name='encrypt_value' size='80'><br>
+            <input type='submit' value='Chiffrer'><br><br>
+                
+            <label>Texte à déchiffrer :</label><br>
+            <input type='text' name='decrypt_value' size='80'><br>
+            <input type='submit' value='Déchiffrer'><br><br>
+            
+            <strong>{message}</strong><br><br>
+        </form>
     """
 
 if __name__ == "__main__":
