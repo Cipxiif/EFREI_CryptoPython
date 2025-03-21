@@ -6,27 +6,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Votre clé personnelle</h1>
-    <form method="post">
-        <label>Clé (générée automatiquement) :</label><br>
-        <input type="text" name="key" value="{{ key }}"><br>
+    <div class="container">
+        <h1>Votre clé personnelle</h1>
+        <form method="post">
+            <label>Clé (générée automatiquement) :</label><br>
+            <input type="text" name="key" value="{{ key }}" readonly><br>
 
-        <label>Texte à chiffrer :</label><br>
-        <input type="text" name="encrypt_value"><br>
-        <input type="submit" value="Chiffrer"><br><br>
+            <label>Texte à chiffrer :</label><br>
+            <input type="text" name="encrypt_value"><br>
+            <input type="submit" value="Chiffrer"><br><br>
 
-        <label>Texte à déchiffrer :</label><br>
-        <input type="text" name="decrypt_value"><br>
-        <input type="submit" value="Déchiffrer"><br><br>
+            <label>Texte à déchiffrer :</label><br>
+            <input type="text" name="decrypt_value"><br>
+            <input type="submit" value="Déchiffrer"><br><br>
 
-        <strong>{{ message }}</strong><br><br>
+            {% if message %}
+                <div class="result-box">{{ message }}</div>
+            {% endif %}
 
-        {% if encrypted_value %}
-            <b>Résultat chiffré :</b> {{ encrypted_value }}
-        {% endif %}
-        {% if decrypted_value %}
-            <b>Résultat déchiffré :</b> {{ decrypted_value }}
-        {% endif %}
-    </form>
+            {% if encrypted_value %}
+                <div class="result-box">
+                    <b>Résultat chiffré :</b>
+                    <p class="result-text">{{ encrypted_value }}</p>
+                </div>
+            {% endif %}
+
+            {% if decrypted_value %}
+                <div class="result-box">
+                    <b>Résultat déchiffré :</b>
+                    <p class="result-text">{{ decrypted_value }}</p>
+                </div>
+            {% endif %}
+        </form>
+    </div>
 </body>
 </html>
