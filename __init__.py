@@ -37,7 +37,7 @@ def decryptage(key, valeur):
     except Exception as e:
         return f"Erreur : clé invalide ou autre problème - {str(e)}"
 
-@app.route('/my_key')
+@app.route('/mykey')
 def my_key():
     if 'user_key' not in session:
         session['user_key'] = Fernet.generate_key().decode()
