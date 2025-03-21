@@ -7,8 +7,7 @@ import sqlite3
 import os
 
 app = Flask(__name__)
-print("SECRET_KEY:", os.getenv("SECRET_KEY", "test"))
-app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")
+app.secret_key = "e3p58Q7YMvxfh6jJVkx8n6qq"
 
 @app.route('/')
 def hello_world():
