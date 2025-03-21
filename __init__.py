@@ -6,7 +6,8 @@ import sqlite3
 
 import os
 
-app = Flask(__name__)                                                                                                                  
+app = Flask(__name__)
+print("SECRET_KEY:", os.getenv("SECRET_KEY", "test"))
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")
 
 @app.route('/')
